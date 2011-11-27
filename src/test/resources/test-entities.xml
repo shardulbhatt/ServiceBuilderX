@@ -1,0 +1,22 @@
+<entities>
+    <entity name="Customer" alias="customer" jpaEnabled="true">
+        <package name="com.generated.entities" alias="pkgEntities" />
+        <properties defaultType="java.lang.String">
+            <property name="name" />
+            <property name="occupation" />
+            <property name="age" type="int" />
+        </properties>
+    </entity>
+     
+    <entity name="Address" alias="address" jpaEnabled="true">
+        <package name="com.generated.entities" alias="pkgEntities" />
+        <properties defaultType="java.lang.String" >
+            <property name="flatNo" />
+            <property name="apartment" />
+            <property name="landmark" />
+            <property name="city" />
+            <property name="state" />
+            <property name="country" />
+        </properties>
+    </entity>
+</entities>

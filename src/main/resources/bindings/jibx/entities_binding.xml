@@ -1,0 +1,59 @@
+<binding>
+    <!-- Entities Mapping -->
+    <mapping name="entities" class="com.tools.codegeneration.api.model.Entities">
+        <collection field="entities" factory="com.tools.codegeneration.api.model.Entities.listFactory">
+            <structure name="entity" type="com.tools.codegeneration.api.model.Entity">
+                <value name="jpaEnabled" field="jpaEnabled" style="attribute" />
+                <!--
+                    Here the added structure element uses a 'field' attribute 
+                    but no 'name' attribute. This tells JiBX that the properties
+                    from the com.tools.codegeneration.api.model.Name class 
+                    instance referenced by the 'name' field should be included 
+                    directly as children/in other desired style of 
+                    the 'entity' element in the XML document. 
+                 -->
+                <structure type="com.tools.codegeneration.api.model.Name" field="entityName" value-style="attribute">
+                    <value name="name" field="name" />
+                    <value name="alias" field="alias" />
+                </structure>
+                
+                <structure name="package" type="com.tools.codegeneration.api.model.Package" field="entityPackage">
+                    <structure type="com.tools.codegeneration.api.model.Name" field="name" value-style="attribute">
+                        <value name="name" field="name" />
+                        <value name="alias" field="alias" />
+                    </structure>
+                </structure>
+                
+                <structure name="properties" type="com.tools.codegeneration.api.model.Properties" field="properties">
+                    <value style="attribute" name="defaultType" field="defaultType" />
+	                <collection field="properties" factory="com.tools.codegeneration.api.model.Properties.listFactory">
+	                    <structure name="property" type="com.tools.codegeneration.api.model.Property" value-style="attribute">
+	                        <value name="name" field="name" />
+	                        <value name="type" field="type" usage="optional"/>
+	                    </structure>
+	                </collection>    
+                </structure>
+            </structure>
+        </collection>
+    </mapping>
+    
+    <!-- Relationships Mapping -->
+    <mapping name="relations" class="com.tools.codegeneration.api.model.relationships.Relations">
+        <collection field="relations" factory="com.tools.codegeneration.api.model.relationships.Relations.relationListFactory">
+            <structure name="relation" type="com.tools.codegeneration.api.model.relationships.Relation" value-style="attribute">
+                 <structure field="one" type="com.tools.codegeneration.api.model.relationships.One" value-style="attribute">
+                        <value name="one" field="type" />
+                 </structure>   
+                 
+                 <structure field="many" type="com.tools.codegeneration.api.model.relationships.Many" value-style="attribute">
+                        <value name="many" field="type"/>
+                        <value name="collection" field="collectionType"/>
+                 </structure>   
+                 
+                 <value name="bidirectional" field="bidirectional" usage="optional" />
+                 <value name="oneToOne"  field="oneToOne" usage="optional" />
+                 <value name="manyToMany" field="manyToMany" usage="optional" />
+            </structure>
+        </collection>
+    </mapping>
+</binding>

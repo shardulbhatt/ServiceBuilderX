@@ -1,0 +1,31 @@
+<relations>
+    <!--
+        <relation> element provides following attributes:
+        
+        "one" : the type of the entity representing the ONE end of the relation.
+        
+        "many" : the type of the entity representing the MANY end of the relation 
+        "collection" : the type of the collection holding the type of entities 
+        represented by the MANY end of the relation.
+        
+        Following are the OPTIONAL attributes holding a boolean value "true"
+        or "false".
+         
+        "bidirectional" : for specifying if the relationship is bidirectional 
+        or not.That is the related entities can be obtained from the either end 
+        of the relation.
+        
+        "oneToOne" : Use a "true" value for specifying the relationship as 
+        ONE-to-ONE.That is the type of the entity specified by attribute
+        "one" and the type of the entity specified by attribute "many" are 
+        defined by a ONE-to-ONE relation.
+        
+        "manyToMany" : Use a "true" value for specifying the relationship as 
+        MANY-to-MANY.That is the type of the entity specified by attribute
+        "one" and the type of the entity specified by attribute "many" are 
+        defined by a MANY-to-MANY relation.
+    -->
+    <relation one="com.generated.entities.Customer" 
+              many="com.generated.entities.Address" 
+              collection="java.util.Set" />
+</relations>
