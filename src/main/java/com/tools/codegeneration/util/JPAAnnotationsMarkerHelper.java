@@ -1,7 +1,8 @@
 package com.tools.codegeneration.util;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 import com.tools.codegeneration.api.model.relationships.Relation.RelationType;
 import com.tools.codegeneration.constants.JPAConstants;
@@ -9,47 +10,59 @@ import com.tools.codegeneration.constants.StringConstants;
 
 public class JPAAnnotationsMarkerHelper {
 
-	private static final Set<String> jpaAnnotationTypes = new HashSet<String>();
-	
-	public static final void addJPAAnnotationType(String annotationTypeFullyQualifiedName) {
-		if (!jpaAnnotationTypes.contains(annotationTypeFullyQualifiedName)) {
-			jpaAnnotationTypes.add(annotationTypeFullyQualifiedName);	
-		}
-	}
-	
-	public static final Set<String> getJPAAnnotationTypes() {
-		return jpaAnnotationTypes;
-	}
-	
 	/**
 	 * 
-	 * @param relationType
-	 * @return
+	 * @param relationType the {@link RelationType} enum value
+	 * @param addCascadeValue a boolean value.<code>true</code> for adding
+	 * the cascade attribute to the JPA Relationship annotation, <code>false</code>
+	 * otherwise.
+	 * 
+	 * @return a formatted string representing a JPA relationship annotation
 	 */
-	public static final String createRelationAnnotation(RelationType relationType) {
+	public static final String createRelationAnnotation(
+				RelationType relationType, boolean addCascadeValue) {
+		
+		String annotation = StringConstants.EMPTY_STRING;
 		
 		switch (relationType) {
 			case ONE_TO_MANY:
-				return createAnnotation(JPAConstants.ONE_TO_MANY_TYPE, true);
+				annotation = createAnnotation(JPAConstants.ONE_TO_MANY_TYPE, false);
+				break;
 				
 			case MANY_TO_ONE:
-				return createAnnotation(JPAConstants.MANY_TO_ONE_TYPE, true);
+				annotation = createAnnotation(JPAConstants.MANY_TO_ONE_TYPE, false);
+				break;
 				
 			case ONE_TO_ONE:
-				return createAnnotation(JPAConstants.ONE_TO_ONE_TYPE, true);
+				annotation = createAnnotation(JPAConstants.ONE_TO_ONE_TYPE, false);
+				break;
 				
 			case MANY_TO_MANY:
-				return createAnnotation(JPAConstants.MANY_TO_MANY_TYPE, true);
-				
+				annotation = createAnnotation(JPAConstants.MANY_TO_MANY_TYPE, false);
+				break;
 		}
 		
-		return StringConstants.EMPTY_STRING;
+		if (addCascadeValue) {
+			//Example: @ManyToOne(cascade = CascadeType.ALL)
+			StringBuilder sb = new StringBuilder(annotation);
+			sb.append(StringConstants.LEFT_PARENTHESES);
+			sb.append(JPAConstants.CASCADE_ATTR);
+			sb.append(StringConstants.EQUALS_PREFIXED_SUFFIXED_WITH_SPACE);
+			sb.append(JPAConstants.CASCADE_ALL);
+			sb.append(StringConstants.RIGHT_PARENTHESES);
+			
+			sb.append(StringConstants.LINE_BREAK);
+			return sb.toString();
+		}
+		
+		return annotation;
 	}
 
 	/**
 	 * 
-	 * @param relationType
-	 * @return
+	 * @param relationType the {@link RelationType} enum value
+	 * 
+	 * @return the JPA type name corresponding to the specified <code>relationType</code>
 	 */
 	public static final String getRelationTypeFullyQualifiedName(RelationType relationType) {
 		switch (relationType) {
@@ -71,7 +84,7 @@ public class JPAAnnotationsMarkerHelper {
 	
 	/**
 	 * 
-	 * @return
+	 * @return a formatted string representing a JPA {@link Id} annotation
 	 */
 	public static final String createIdAnnotation() {
 		
@@ -93,7 +106,7 @@ public class JPAAnnotationsMarkerHelper {
 	
 	/**
 	 * 
-	 * @return
+	 * @return a formatted string representing a JPA {@link Entity} annotation
 	 */
 	public static final String createEntityAnnotation() {
 		return createAnnotation(JPAConstants.ENTITY_TYPE, true);
@@ -101,12 +114,23 @@ public class JPAAnnotationsMarkerHelper {
 	
 	/**
 	 * 
-	 * @return
+	 * @return a formatted string representing a JPA {@link Column} annotation
 	 */
 	public static final String createColumnAnnotation() {
 		return createAnnotation(JPAConstants.COLUMN_TYPE, true);
 	}
 	
+	/**
+	 * 
+	 * @param jpaTypeFullyQualifiedName the fully qualified type name of a JPA 
+	 * type
+	 *  
+	 * @param addLineBreakAtTheEnd a boolean value.<code>true</code> for adding
+	 * a line break at the end of the returned string, <code>false</code>
+	 * otherwise.
+	 * 
+	 * @return a formatted string representing a JPA annotation
+	 */
 	private static final String createAnnotation(
 			String jpaTypeFullyQualifiedName, boolean addLineBreakAtTheEnd) {
 		StringBuilder annotationBuilder = new StringBuilder();

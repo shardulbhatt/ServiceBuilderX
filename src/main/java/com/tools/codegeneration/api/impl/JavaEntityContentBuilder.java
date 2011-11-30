@@ -291,7 +291,7 @@ public class JavaEntityContentBuilder implements ContentBuilder<Entity> {
 												relationType));
 							
 							propertiesInstanceVariablesBuilder
-								.append(JPAAnnotationsMarkerHelper.createRelationAnnotation(relationType));	
+								.append(JPAAnnotationsMarkerHelper.createRelationAnnotation(relationType, true));	
 						} else {
 							propertiesInstanceVariablesBuilder
 								.append(JPAAnnotationsMarkerHelper.createColumnAnnotation());	

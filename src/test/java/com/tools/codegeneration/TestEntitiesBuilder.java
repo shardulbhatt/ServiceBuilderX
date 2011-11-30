@@ -21,7 +21,7 @@ public class TestEntitiesBuilder {
 	private static final String TEST_ENTITIES_XML_FILE = "/test-entities.xml";
 	private static final String TEST_RELATIONS_XML_FILE = "/test-relationships.xml";
 	private static final String SOURCE_PATH = 
-			"/media/data/Practice/CoreJava/codegeneration-tool/src/main/java";
+			"/media/jdata/My-Technical-Work/Programming/Languages/Java/Practice/Standalone/CodeGeneration/codegeneration-tool/src/main/java";
 	
 	private Entities entities = null;
 	private Relations relations = null;

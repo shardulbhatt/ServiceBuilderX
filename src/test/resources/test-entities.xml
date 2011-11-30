@@ -19,4 +19,15 @@
             <property name="country" />
         </properties>
     </entity>
+    
+    <entity name="Account" alias="account" jpaEnabled="true">
+        <package name="com.generated.entities" alias="pkgEntities" />
+        <properties defaultType="java.lang.String" >
+            <property name="accountNumber" />
+            <property name="branch" />
+            <property name="bankName" />
+            <property name="bankCode" />
+        </properties>
+    </entity>
+    
 </entities>

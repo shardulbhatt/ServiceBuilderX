@@ -5,8 +5,13 @@
         "one" : the type of the entity representing the ONE end of the relation.
         
         "many" : the type of the entity representing the MANY end of the relation 
+        
         "collection" : the type of the collection holding the type of entities 
         represented by the MANY end of the relation.
+        
+        TODO:  "collection" attribute should also be optional because in case
+        oneToOne is specified as true, this attribute's value can be ignored.
+        Work on it later.
         
         Following are the OPTIONAL attributes holding a boolean value "true"
         or "false".
@@ -28,4 +33,8 @@
     <relation one="com.generated.entities.Customer" 
               many="com.generated.entities.Address" 
               collection="java.util.Set" />
+              
+    <relation one="com.generated.entities.Customer"
+              many="com.generated.entities.Account"
+              collection="java.util.List" bidirectional="true"/>              
 </relations>
