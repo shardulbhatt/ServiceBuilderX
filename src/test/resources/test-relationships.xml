@@ -6,15 +6,11 @@
         
         "many" : the type of the entity representing the MANY end of the relation 
         
-        "collection" : the type of the collection holding the type of entities 
-        represented by the MANY end of the relation.
-        
-        TODO:  "collection" attribute should also be optional because in case
-        oneToOne is specified as true, this attribute's value can be ignored.
-        Work on it later.
-        
         Following are the OPTIONAL attributes holding a boolean value "true"
         or "false".
+
+        "collection" : the type of the collection holding the type of entities 
+        represented by the MANY end of the relation.
          
         "bidirectional" : for specifying if the relationship is bidirectional 
         or not.That is the related entities can be obtained from the either end 
@@ -30,11 +26,17 @@
         "one" and the type of the entity specified by attribute "many" are 
         defined by a MANY-to-MANY relation.
     -->
+    <!-- 
     <relation one="com.generated.entities.Customer" 
               many="com.generated.entities.Address" 
               collection="java.util.Set" />
+     -->
               
     <relation one="com.generated.entities.Customer"
               many="com.generated.entities.Account"
-              collection="java.util.List" bidirectional="true"/>              
+              collection="java.util.List" bidirectional="true"/>
+              
+    <relation one="com.generated.entities.Customer" 
+              many="com.generated.entities.Address" 
+              oneToOne="true" />              
 </relations>

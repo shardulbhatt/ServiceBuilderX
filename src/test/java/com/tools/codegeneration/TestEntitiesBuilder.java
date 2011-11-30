@@ -34,8 +34,8 @@ public class TestEntitiesBuilder {
 	
 	@Test
 	public void testUnmarshallEntitiesAndRelations() throws JiBXException {
-		System.out.println(entities);
-		System.out.println(relations);
+		//System.out.println(entities);
+		//System.out.println(relations);
 	}
 	
 	

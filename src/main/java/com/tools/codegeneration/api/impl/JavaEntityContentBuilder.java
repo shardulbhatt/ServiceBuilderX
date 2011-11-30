@@ -13,7 +13,6 @@ import com.tools.codegeneration.api.ContentBuilder;
 import com.tools.codegeneration.api.model.Entity;
 import com.tools.codegeneration.api.model.Properties;
 import com.tools.codegeneration.api.model.Property;
-import com.tools.codegeneration.api.model.relationships.Relation.RelationType;
 import com.tools.codegeneration.constants.JPAConstants;
 import com.tools.codegeneration.constants.JavaReservedConstants;
 import com.tools.codegeneration.constants.StringConstants;
@@ -269,34 +268,12 @@ public class JavaEntityContentBuilder implements ContentBuilder<Entity> {
 					
 			StringBuilder propertiesInstanceVariablesBuilder = new StringBuilder();
 			
-			RelationType relationType = null;
 			for (Property property : entityProperties) {
 				
 				if (isEntityJPAEnabled) {
-					
-					propertiesInstanceVariablesBuilder
-							.append(StringConstants.TAB_4_WIDTH);
-					
-					if (property.isId()) {
-						propertiesInstanceVariablesBuilder
-							.append(JPAAnnotationsMarkerHelper.createIdAnnotation());
-					} else {
-						relationType = property.getRelationType();
-						if (RelationType.NOT_RELATED != relationType) {
-							// Add the relation type fully qualified name and its  
-							// short name creating 
-							PropertyTypeName.addTypeName(
-									JPAAnnotationsMarkerHelper
-										.getRelationTypeFullyQualifiedName(
-												relationType));
-							
-							propertiesInstanceVariablesBuilder
-								.append(JPAAnnotationsMarkerHelper.createRelationAnnotation(relationType, true));	
-						} else {
-							propertiesInstanceVariablesBuilder
-								.append(JPAAnnotationsMarkerHelper.createColumnAnnotation());	
-						}
-					}
+					propertiesInstanceVariablesBuilder.append(
+							JPAAnnotationsMarkerHelper
+									.addJPAAnnotationsToProperty(property));
 				}
 				
 				propertiesInstanceVariablesBuilder

@@ -13,9 +13,11 @@ public interface JPAConstants {
 	public static final String MANY_TO_MANY_TYPE = "javax.persistence.ManyToMany";
 	public static final String CASCADE_ENUM_TYPE = "javax.persistence.CascadeType";
 	
-	public static final String GENERATION_TYPE_AUTO = "GenerationType.AUTO";
+	public static final String AUTO_PRIMARY_KEY_GENERATION_STRATEGY = "GenerationType.AUTO";
 	public static final String GENERATED_VALUE_TYPE_STRATEGY_ATTR = "strategy";
 	public static final String CASCADE_ATTR = "cascade";
 	public static final String CASCADE_ALL = "CascadeType.ALL";
-	
+	public static final String MAPPED_BY_ATTR = "mappedBy";
+	public static final String ID_GENERATOR_ATTR = "generator";
+	public static final String ID_GENERATOR_TYPE_FOREIGN = "foreign";
 }

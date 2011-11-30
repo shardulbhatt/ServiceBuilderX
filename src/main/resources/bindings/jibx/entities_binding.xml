@@ -47,7 +47,7 @@
                  
                  <structure field="many" type="com.tools.codegeneration.api.model.relationships.Many" value-style="attribute">
                         <value name="many" field="type"/>
-                        <value name="collection" field="collectionType"/>
+                        <value name="collection" field="collectionType" usage="optional"/>
                  </structure>   
                  
                  <value name="bidirectional" field="bidirectional" usage="optional" />

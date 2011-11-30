@@ -7,16 +7,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-
 import com.tools.codegeneration.api.model.Entity;
-import com.tools.codegeneration.api.model.Properties;
-import com.tools.codegeneration.api.model.Property;
 import com.tools.codegeneration.api.model.relationships.Relation;
 import com.tools.codegeneration.api.model.relationships.Relation.RelationType;
-import com.tools.codegeneration.constants.JPAConstants;
-import com.tools.codegeneration.constants.UtilityConstants;
 import com.tools.codegeneration.util.EntityHelper;
 import com.tools.codegeneration.util.InputOutputUtil;
 import com.tools.codegeneration.util.PackageHelper;
@@ -79,7 +72,7 @@ public class EntitiesBuilder {
 		// Gather properties type for creating import statements
 		PropertyTypeName.addTypesNameFromEntities(entities);
 		
-		System.out.println(PropertyTypeName.getAllTypesName());
+		// System.out.println(PropertyTypeName.getAllTypesName());
 		// Create a Map for holding entries mapped by PACKAGE NAME to its 
 		// DEFINED ENTITIES 
 		Map<String, Set<String>> packageEntityNamesMap = 
@@ -105,25 +98,14 @@ public class EntitiesBuilder {
 		String entityFullyQualifiedName = null;
 		Collection<String> entityContents = null;
 		
-		Properties propertiesWrapper = null;
-		
-		boolean isEntityJPAEnabled = false;
 		for (Entity entity : entities) {
 			
 			packageName = entity.getEntityPackage().getName().getName();
 			entityName = entity.getEntityName().getName();
 			entityFullyQualifiedName = EntityHelper.getEntityFullyQualifiedName(packageName, entityName);
-			propertiesWrapper = entity.getProperties();
+			
 			PackageHelper.addToPackageEntitiesNameMap(
 					packageName, entityName, packageEntityNamesMap);
-			
-			isEntityJPAEnabled = entity.isJpaEnabled();
-			if (isEntityJPAEnabled) {
-				addIdProperty(propertiesWrapper);
-				// This is for creating the import statements
-				setJPAAnnotationTypeColumnForPropertyNotIdAndNotRelated(
-							propertiesWrapper);
-			}
 			
 			entityContents = entityContentBuilder.createContent(entity);
 			
@@ -141,58 +123,6 @@ public class EntitiesBuilder {
 				getSourceGenerationPath());
 	}
 
-	/**
-	 * Adds a property, to the current properties list of a given entity which is 
-	 * detected as JPA enabled, named "id" annotation with JPA 
-	 * {@link Id} and its related annotation(s).
-	 * 
-	 * @param propertiesWrapper the {@link Properties} instance of a given 
-	 * entity
-	 */
-	private void addIdProperty(Properties propertiesWrapper) {
-		// Update entity's current properties list to include a "id" property
-		// of default type java.lang.Long
-		
-		List<Property> currentEntityProperties = propertiesWrapper.getProperties();
-		
-		Property idProperty = new Property();
-		idProperty.setName(UtilityConstants.ID_PROPERTY_NAME);
-		idProperty.setType(UtilityConstants.ID_PROPERTY_DEFAULT_TYPE);
-		idProperty.setId(true);
-		// This is for creating the import statement
-		idProperty.setJpaAnnotationTypes(new String[] {	
-					JPAConstants.ID_TYPE,
-					JPAConstants.GENERATED_VALUE_TYPE,
-					JPAConstants.GENERATION_TYPE
-				});
-		currentEntityProperties.add(0, idProperty);
-	}
-	
-	/**
-	 * Sets the value for {@link Property#getJpaAnnotationTypes()} property.
-	 * A given entity's, detected as JPA enabled, each property, which is not of
-	 * type id and not a related entity, should be marked with {@link Column} 
-	 * annotation until and unless a property is explicitly marked as transient.
-	 *  
-	 * TODO: Add support for marking the properties as transient
-	 * 
-	 * @param propertiesWrapper the {@link Properties} instance of a given 
-	 * entity 
-	 */
-	private void setJPAAnnotationTypeColumnForPropertyNotIdAndNotRelated(
-				Properties propertiesWrapper) {
-		List<Property> currentEntityProperties = propertiesWrapper.getProperties();
-		
-		for (Property property : currentEntityProperties) {
-			if (!property.isId() && 
-					(RelationType.NOT_RELATED == property.getRelationType())) {
-				property.setJpaAnnotationTypes(new String[] { JPAConstants.COLUMN_TYPE });
-			}
-		}
-	}
-	
-	
-	
 	/**
 	 * 
 	 * @param packageEntityNamesMap a {@link Map} for holding entries mapped 

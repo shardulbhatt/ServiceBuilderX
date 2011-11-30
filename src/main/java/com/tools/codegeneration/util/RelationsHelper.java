@@ -40,8 +40,8 @@ public class RelationsHelper {
 		
 		for (Relation relation : relations) {
 
-			isOneToOne = relation.isManyToMany();
-			isManyToMany = relation.isOneToOne();
+			isOneToOne = relation.isOneToOne();
+			isManyToMany = relation.isManyToMany();
 			isBidirectional = relation.isBidirectional();
 			
 			// Identify incorrect relations

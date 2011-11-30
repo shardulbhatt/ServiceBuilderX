@@ -16,4 +16,7 @@ public interface StringConstants {
 	public static final String LESS_THAN = "<";
 	public static final String AT_SIGN = "@";
 	public static final String EMPTY_STRING = "";
+	public static final String COMMA = ",";
+	public static final String COMMA_SUFFIXED_WITH_SPACE = ", ";
+	public static final String DOUBLE_QUOTE = "\"";
 }
