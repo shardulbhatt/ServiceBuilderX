@@ -3,6 +3,8 @@ package com.tools.codegeneration.api.model;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import com.tools.codegeneration.util.EntityHelper;
+
 public class Entity {
 	private Name entityName;
 	private Package entityPackage;
@@ -63,6 +65,18 @@ public class Entity {
 	 */
 	public void setJpaEnabled(boolean jpaEnabled) {
 		this.jpaEnabled = jpaEnabled;
+	}
+	
+	/**
+	 * 
+	 * @return the {@link Entity}'s fully qualified name
+	 */
+	public String getEntityFullyQualifiedName() {
+		assert(entityPackage != null && entityPackage.getName() != null);
+		assert(entityName != null && entityName.getName() != null);
+		
+		return EntityHelper.getEntityFullyQualifiedName(
+					entityPackage.getName().getName(), entityName.getName());
 	}
 
 	@Override

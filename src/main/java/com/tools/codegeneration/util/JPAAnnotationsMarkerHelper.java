@@ -34,9 +34,6 @@ public class JPAAnnotationsMarkerHelper {
 
 		JPAProperties jpaProperties = new JPAProperties();
 		
-		RelationType relationType = property.getRelationType();
-		
-		
 		if (property.isId()) {
 		
 			IdAnnotationType propertyIdAnnotationType = property.getIdAnnotationType();
@@ -62,6 +59,7 @@ public class JPAAnnotationsMarkerHelper {
 			}
 			
 		} else {
+			RelationType relationType = property.getRelationType();
 			
 			if (RelationType.NOT_RELATED != relationType) {
 				// Get the JPA Annotation Types set on the property
@@ -169,8 +167,23 @@ public class JPAAnnotationsMarkerHelper {
 			}
 			sb.append(StringConstants.RIGHT_PARENTHESES);
 			sb.append(StringConstants.LINE_BREAK);
+			
 			annotation = sb.toString();
 		}
+		
+		// Add the javax.persistence.PrimaryKeyJoinColumn annotation on
+		// One-To-One related Primary entity which should not have a "mappedBy" 
+		// attribute
+		if ((RelationType.ONE_TO_ONE == relationType) && (!addMappedBy)) {
+			StringBuilder sb = new StringBuilder(annotation);
+			
+			sb.append(StringConstants.TAB_4_WIDTH);
+			sb.append(createAnnotation(
+							JPAConstants.PRIMARY_KEY_JOIN_COLUMN_TYPE, true));
+			
+			annotation = sb.toString();
+		}
+		
 		
 		return annotation;
 	}

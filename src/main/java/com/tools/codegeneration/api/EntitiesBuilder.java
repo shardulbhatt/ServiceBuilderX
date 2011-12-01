@@ -66,7 +66,7 @@ public class EntitiesBuilder {
 	 * 
 	 * @param entities a {@link List} of {@link Entity} instances representing
 	 * entities definitions specified in a predefined format in 
-	 * entities definition XML (<b>entities.xml</b>)
+	 * <i>entities definition XML</i>
 	 */
 	public void buildEntities(List<Entity> entities, List<Relation> relations) {
 		// Gather properties type for creating import statements
@@ -83,26 +83,36 @@ public class EntitiesBuilder {
 		Map<String, Collection<String>> entityNameFullyQualifiedNameEntityContentsMap 
 						= new HashMap<String, Collection<String>>();
 		
+		// Maps entity fully qualified name to its JPA enabled status
+		Map<String, Boolean> entityFullyQualifiedNameIsJPAEnabledMap = 
+					getEntityFullyQualifiedNameIsJPAEnabledMap(entities);
+		
+		
 		// Categorize Relation instances, based on the relations specified
 		// in relations definition XML.
 		Map<RelationType, List<Relation>> categorizedRelationsMap = 
-						RelationsHelper.categorizeRelationsByRelationType(relations);
+						RelationsHelper.categorizeRelationsByRelationType(
+								entities, relations, 
+								entityFullyQualifiedNameIsJPAEnabledMap);
 		
-		// Update current list of each entity's property(s) by adding the related
-		// entities as properties to its existing property list.
-		PropertiesHelper.updateProperties(entities, categorizedRelationsMap);
+		if(categorizedRelationsMap != null && !categorizedRelationsMap.isEmpty()) {
+			// Update current list of each entity's property(s) by adding the related
+			// entities as properties to its existing property list.
+			PropertiesHelper.updateProperties(
+					entities, categorizedRelationsMap, 
+					entityFullyQualifiedNameIsJPAEnabledMap);	
+		}
+		
 		
 		// Create entities content
 		String packageName = null;
 		String entityName = null;
-		String entityFullyQualifiedName = null;
 		Collection<String> entityContents = null;
 		
 		for (Entity entity : entities) {
 			
 			packageName = entity.getEntityPackage().getName().getName();
 			entityName = entity.getEntityName().getName();
-			entityFullyQualifiedName = EntityHelper.getEntityFullyQualifiedName(packageName, entityName);
 			
 			PackageHelper.addToPackageEntitiesNameMap(
 					packageName, entityName, packageEntityNamesMap);
@@ -113,7 +123,8 @@ public class EntitiesBuilder {
 //			System.out.println(entityContents);
 			
 			entityNameFullyQualifiedNameEntityContentsMap.put(
-					entityFullyQualifiedName, entityContents);
+					entity.getEntityFullyQualifiedName(), entityContents);
+			
 		}
 		
 		// Generate packages and its entities
@@ -121,6 +132,20 @@ public class EntitiesBuilder {
 				packageEntityNamesMap, 
 				entityNameFullyQualifiedNameEntityContentsMap, 
 				getSourceGenerationPath());
+	}
+	
+	private static Map<String, Boolean> getEntityFullyQualifiedNameIsJPAEnabledMap(
+				List<Entity> entities) {
+		// Maps entity fully qualified name to its JPA enabled status
+		Map<String, Boolean> entityFullyQualifiedNameIsJPAEnabledMap = 
+				new HashMap<String, Boolean>();
+		
+		for (Entity entity : entities) {
+			entityFullyQualifiedNameIsJPAEnabledMap.put(
+					entity.getEntityFullyQualifiedName(), entity.isJpaEnabled());
+		}
+		
+		return entityFullyQualifiedNameIsJPAEnabledMap;
 	}
 
 	/**
